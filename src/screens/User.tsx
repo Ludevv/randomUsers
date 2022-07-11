@@ -24,24 +24,20 @@ const UserScreen = (props: UserProps) => {
   return (
     <View>
       <Header />
-      <Image
-        source={{
-          uri: large,
-        }}
-        style={styles.stretch}
-      />
-      <Text>
-        {first} {last}
-      </Text>
-      <Text>{username}</Text>
-      <View>
-        <View style={styles.row}>
-          <Text>{street.name} </Text>
-          <Text>{street.number}</Text>
-        </View>
-        <View style={styles.row}>
-          <Text> {postcode}</Text>
-          <Text> {city} </Text>
+      <View style={styles.container}>
+        <Image
+          source={{
+            uri: large,
+          }}
+          style={styles.stretch}
+        />
+        <View style={styles.card}>
+          <Text style={styles.name}>
+            {first} {last}
+          </Text>
+          <Text>{`Username: ${username}`}</Text>
+          <Text>{`Adress: ${street.name} ${street.number}`}</Text>
+          <Text>{`City: ${postcode} ${city}`}</Text>
         </View>
       </View>
     </View>
@@ -49,13 +45,28 @@ const UserScreen = (props: UserProps) => {
 };
 
 const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
+  container: {
+    marginTop: 20,
+    alignItems: 'center',
   },
   stretch: {
     width: 200,
     height: 200,
+    borderRadius: 100,
     resizeMode: 'contain',
+  },
+  card: {
+    marginTop: 20,
+    backgroundColor: '#dfdfdf',
+    width: '80%',
+    borderRadius: 10,
+    padding: 15,
+  },
+  name: {
+    textAlign: 'center',
+    fontSize: 25,
+    textDecorationLine: 'underline',
+    marginBottom: 15,
   },
 });
 

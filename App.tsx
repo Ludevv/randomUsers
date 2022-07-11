@@ -10,6 +10,7 @@ import {
 } from '@react-navigation/native-stack';
 import {APP_ROUTES, RootAppParamList} from './lib/constants/routes';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {StatusBar} from 'react-native';
 
 export const RootStack = createNativeStackNavigator<RootAppParamList>();
 
@@ -22,6 +23,11 @@ export const useAppNavigation = () => useNavigation<GlobalNavigationProps>();
 
 const App = () => (
   <SafeAreaProvider>
+    <StatusBar
+      backgroundColor="transparent"
+      barStyle="light-content"
+      translucent
+    />
     <NavigationContainer>
       <RootStack.Navigator
         initialRouteName="index"
