@@ -1,5 +1,5 @@
 import {FlatList, StyleSheet, TextInput, View} from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {ScreenNavigationProps} from '../../App';
 import ListItem from '../components/ListItem';
 import Header from '../components/Header';
@@ -12,8 +12,17 @@ const UsersScreen = (props: UsersProps) => {
   } = props;
 
   const [searchPhrase, setSearchPhrase] = useState('');
-  const [users, setUsers] = useState(params.users);
   const [seletedUuid, setSelectedUuid] = useState<string | undefined>();
+
+  const users = useMemo(
+    () =>
+      params.users?.filter(
+        user =>
+          user?.name?.first?.includes(searchPhrase) ||
+          user?.location?.city?.includes(searchPhrase),
+      ),
+    [params.users, searchPhrase],
+  );
 
   const handleChangeColor = useCallback(
     (id: string) => {
@@ -25,16 +34,6 @@ const UsersScreen = (props: UsersProps) => {
     },
     [seletedUuid],
   );
-
-  useEffect(() => {
-    const filteredUsers = params.users.filter(
-      ({name, location}) =>
-        name.first.includes(searchPhrase) ||
-        location.city.includes(searchPhrase),
-    );
-
-    setUsers(filteredUsers);
-  }, [params.users, searchPhrase]);
 
   return (
     <View>
@@ -60,7 +59,7 @@ const UsersScreen = (props: UsersProps) => {
             }
           />
         )}
-        keyExtractor={item => `random-user-${item?.login.uuid}`}
+        keyExtractor={item => `random-user-${item?.login?.uuid}`}
         style={styles.flatlist}
       />
     </View>

@@ -2,23 +2,31 @@ import {Image, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {ScreenNavigationProps} from '../../App';
 import Header from '../components/Header';
+import ErrorScreen from './Error';
 
 type UserProps = ScreenNavigationProps<'user'>;
 
 const UserScreen = (props: UserProps) => {
   const {
-    route: {params},
+    route: {
+      params: {user},
+    },
   } = props;
 
-  const {
-    picture: {large},
-    name: {first, last},
-    login: {username},
-    location: {street, city, postcode},
-  } = params.user || {};
+  const {picture, name, login, location} = user || {};
 
-  if (!('user' in params)) {
-    <Text>Oops, we can't find this user</Text>;
+  if (
+    !picture?.large ||
+    !name?.first ||
+    !name?.last ||
+    !login?.username ||
+    !location?.city ||
+    !location?.street ||
+    !location?.postcode ||
+    !location.street?.name ||
+    !location.street?.number
+  ) {
+    return <ErrorScreen title="Oops, we can't find this user! :(" />;
   }
 
   return (
@@ -27,17 +35,17 @@ const UserScreen = (props: UserProps) => {
       <View style={styles.container}>
         <Image
           source={{
-            uri: large,
+            uri: picture.large,
           }}
           style={styles.stretch}
         />
         <View style={styles.card}>
           <Text style={styles.name}>
-            {first} {last}
+            {name.first} {name.last}
           </Text>
-          <Text>{`Username: ${username}`}</Text>
-          <Text>{`Adress: ${street.name} ${street.number}`}</Text>
-          <Text>{`City: ${postcode} ${city}`}</Text>
+          <Text>{`Username: ${login.username}`}</Text>
+          <Text>{`Adress: ${location.street.name} ${location.street.number}`}</Text>
+          <Text>{`City: ${location.postcode} ${location.city}`}</Text>
         </View>
       </View>
     </View>
@@ -67,6 +75,11 @@ const styles = StyleSheet.create({
     fontSize: 25,
     textDecorationLine: 'underline',
     marginBottom: 15,
+  },
+  error: {
+    paddingTop: 80,
+    color: 'red',
+    fontSize: 19,
   },
 });
 

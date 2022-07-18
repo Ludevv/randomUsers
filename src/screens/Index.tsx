@@ -1,9 +1,11 @@
-import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import React from 'react';
 import {useFetch} from '../../lib/hooks/useFetch';
 import {useAppNavigation} from '../../App';
 import Header from '../components/Header';
 import Button from '../components/Button';
+import ErrorScreen from './Error';
+import LoadingScreen from './Loading';
 
 const URL = 'https://randomuser.me/api/?results=200';
 
@@ -13,15 +15,11 @@ const IndexScreen = () => {
   const {data: users, isLoading, error} = useFetch(URL);
 
   if (isLoading) {
-    return (
-      <View style={[styles.container, styles.horizontal]}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
+    return <LoadingScreen />;
   }
 
   if (error) {
-    return <Text>Oops, error, try later</Text>;
+    return <ErrorScreen title="Oops, error during download data, try later!" />;
   }
 
   return (

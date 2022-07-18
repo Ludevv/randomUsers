@@ -19,9 +19,20 @@ type ListItemProps = {
 
 const ListItem = (props: ListItemProps) => {
   const {item, handleChangeColor, style} = props;
-  const {picture, name, location, email, login} = item;
+  const {picture, name, location, email, login} = item || {};
 
   const navigation = useAppNavigation();
+
+  if (
+    !picture?.thumbnail ||
+    !name?.first ||
+    !name?.last ||
+    !location?.city ||
+    !email ||
+    !login?.uuid
+  ) {
+    return null;
+  }
 
   return (
     <TouchableOpacity
@@ -38,7 +49,7 @@ const ListItem = (props: ListItemProps) => {
         <Text style={styles.name}>
           {name.first} {name.last}
         </Text>
-        <Text>{`City: ${location.city}`}</Text>
+        <Text>{`City: ${location?.city}`}</Text>
         <Text>{`Email: ${email}`}</Text>
       </View>
       <Pressable
